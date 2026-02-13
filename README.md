@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# Event Discovery Platform - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Live App: `https://event-discovery-platform-developmen-seven.vercel.app/events`
 
-## Available Scripts
+## 🚀 Quick Start
 
-In the project directory, you can run:
+```bash
+# Clone & install
+git clone <your-repo>
+cd client
+npm install
 
-### `npm start`
+# Set up environment (.env)
+REACT_APP_API_URL=https://event-discovery-platform-development.onrender.com
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Start development server
+npm start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ✨ Features
 
-### `npm test`
+- **User Authentication** - Login/Register with JWT
+- **Event Discovery** - Browse events in responsive grid
+- **Search & Filter** - Search by name, filter by category/location
+- **Event Details** - View full event info with seat availability
+- **Registration** - One-click register with capacity check
+- **Dashboard** - View upcoming/past registrations, cancel bookings
+- **Toast Notifications** - User-friendly feedback for all actions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📱 Pages
 
-### `npm run build`
+| Route | Description |
+|-------|-------------|
+| `/events` | Browse all events |
+| `/event/:id` | Event details & registration |
+| `/dashboard` | User's registrations (private) |
+| `/login` | User login |
+| `/register` | New user registration |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- React.js (Hooks)
+- React Router v6
+- Context API (State management)
+- Axios (HTTP client)
+- Tailwind CSS (Styling)
+- React Hot Toast (Notifications)
+- date-fns (Date formatting)
+- React Icons
+- Vercel (Deployment)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📁 Folder Structure
 
-### `npm run eject`
+```
+client/
+├── src/
+│   ├── components/     # Navbar, EventCard, PrivateRoute
+│   ├── pages/          # Events, EventDetails, Dashboard, Login, Register
+│   ├── context/        # AuthContext.js
+│   ├── App.js          # Routes setup
+│   └── index.js
+├── .env                # Environment variables
+└── package.json
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🔐 Authentication Flow
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. User registers/logs in
+2. Backend returns JWT token
+3. Token stored in localStorage
+4. Token added to all API requests
+5. Auth context provides user state globally
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🌐 API Connection
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The app connects to: `https://event-discovery-platform-development.onrender.com`
 
-## Learn More
+For local development, update `.env`:
+```env
+REACT_APP_API_URL=http://localhost:5000
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📦 Build for Production
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run build
+```
 
-### Code Splitting
+## ☁️ Deploy to Vercel
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Push code to GitHub
+2. Import project on [Vercel](https://vercel.com)
+3. Add environment variable `REACT_APP_API_URL`
+4. Deploy!
