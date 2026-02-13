@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import EventCard from "../components/EventCard";
 import { FiSearch, FiFilter } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -22,11 +23,7 @@ const Events = () => {
     "Other",
   ]);
 
-  useEffect(() => {
-    fetchEvents();
-  }, [filters.search, filters.category, filters.location]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -44,13 +41,16 @@ const Events = () => {
     } catch (error) {
       console.error("❌ Error fetching events:", error);
       console.error("Error details:", error.response?.data || error.message);
-      // eslint-disable-next-line no-undef
       toast.error("Failed to load events");
       setEvents([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, API_URL]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -14,11 +14,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const { API_URL } = useAuth();
 
-  useEffect(() => {
-    fetchRegistrations();
-  }, []);
-
-  const fetchRegistrations = async () => {
+  const fetchRegistrations = useCallback(async () => {
     try {
       console.log("🔍 Fetching user registrations...");
       const response = await axios.get(
@@ -32,7 +28,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    fetchRegistrations();
+  }, [fetchRegistrations]);
 
   const handleCancelRegistration = async (eventId) => {
     try {

@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -30,15 +36,16 @@ export const AuthProvider = ({ children }) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
-  useEffect(() => {
-    if (token) {
-      loadUser();
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    delete axios.defaults.headers.common["Authorization"];
+    setToken(null);
+    setUser(null);
+    toast.success("Logged out successfully");
+    console.log("✅ Logged out");
+  }, []);
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     try {
       console.log("🔄 Loading user...");
       const response = await axios.get(`${API_URL}/api/auth/me`);
@@ -53,7 +60,15 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, logout]);
+
+  useEffect(() => {
+    if (token) {
+      loadUser();
+    } else {
+      setLoading(false);
+    }
+  }, [token, loadUser]);
 
   const register = async (userData) => {
     try {
@@ -104,15 +119,6 @@ export const AuthProvider = ({ children }) => {
       toast.error(error.response?.data?.message || "Login failed");
       return false;
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    delete axios.defaults.headers.common["Authorization"];
-    setToken(null);
-    setUser(null);
-    toast.success("Logged out successfully");
-    console.log("✅ Logged out");
   };
 
   const value = {

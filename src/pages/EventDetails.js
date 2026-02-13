@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-import { FiCalendar, FiMapPin, FiUsers, FiUser } from "react-icons/fi";
+import { FiCalendar, FiMapPin, FiUser } from "react-icons/fi";
 
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated, API_URL } = useAuth();
+  const { isAuthenticated, API_URL } = useAuth();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [registering, setRegistering] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
-  useEffect(() => {
-    fetchEvent();
-    if (isAuthenticated) {
-      checkRegistration();
-    }
-  }, [id, isAuthenticated]);
-
-  const fetchEvent = async () => {
+  const fetchEvent = useCallback(async () => {
     try {
       console.log("🔍 Fetching event:", id);
       const response = await axios.get(`${API_URL}/api/events/${id}`);
@@ -35,9 +28,9 @@ const EventDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, API_URL, navigate]);
 
-  const checkRegistration = async () => {
+  const checkRegistration = useCallback(async () => {
     try {
       const response = await axios.get(
         `${API_URL}/api/registrations/my-registrations`
@@ -49,7 +42,14 @@ const EventDetails = () => {
     } catch (error) {
       console.error("Error checking registration:", error);
     }
-  };
+  }, [id, API_URL]);
+
+  useEffect(() => {
+    fetchEvent();
+    if (isAuthenticated) {
+      checkRegistration();
+    }
+  }, [fetchEvent, checkRegistration, isAuthenticated]);
 
   const handleRegister = async () => {
     if (!isAuthenticated) {
@@ -60,10 +60,9 @@ const EventDetails = () => {
     setRegistering(true);
     try {
       console.log("🔄 Registering for event:", id);
-      const response = await axios.post(`${API_URL}/api/registrations`, {
+      await axios.post(`${API_URL}/api/registrations`, {
         eventId: id,
       });
-      console.log("✅ Registration successful:", response.data);
       toast.success("Successfully registered for event!");
       setIsRegistered(true);
       fetchEvent();
