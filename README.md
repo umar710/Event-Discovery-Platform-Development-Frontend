@@ -1,6 +1,6 @@
 # Event Discovery Platform - Frontend
 
-Live App: (https://event-discovery-platform-developmen-seven.vercel.app/events)
+Live App: (https://event-discovery-platform-developmen-seven.vercel.app/login)
 
 ## 🚀 Quick Start
 
